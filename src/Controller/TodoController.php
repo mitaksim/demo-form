@@ -3,15 +3,16 @@
 namespace App\Controller;
 
 use App\Model\TodoModel;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 class TodoController extends AbstractController
 {
     /**
      * Liste des tâches
      *
-     * @Route("/todos", name="todo_list")
+     * @Route("/todos", name="todo_list", methods={"GET"})
      */
     public function todoList()
     {
@@ -25,7 +26,7 @@ class TodoController extends AbstractController
     /**
      * Affichage d'une tâche
      *
-     * @Route("/todo/{id}", name="todo_show", requirements={"id" = "\d+"})
+     * @Route("/todo/{id}", name="todo_show", requirements={"id" = "\d+"}, methods={"GET"})
      */
     public function todoShow($id)
     {
@@ -39,7 +40,7 @@ class TodoController extends AbstractController
     /**
      * Changement de statut
      *
-     * @Route("/todo/{id}/{status}", name="todo_set_status", requirements={"id" = "\d+"})
+     * @Route("/todo/{id}/{status}", name="todo_set_status", requirements={"id" = "\d+"}, methods={"POST"})
      */
     public function todoSetStatus($id, $status)
     {
@@ -49,12 +50,12 @@ class TodoController extends AbstractController
     /**
      * Ajout d'une tâche
      *
-     * @Route("/todo/add", name="todo_add")
+     * @Route("/todo/add", name="todo_add", methods={"POST"})
      *
      * La route est définie en POST parce qu'on veut ajouter une ressource sur le serveur
      */
-    public function todoAdd()
+    public function todoAdd(Request $request)
     {
-
+        dump($request->request->get('task'));exit;
     }
 }

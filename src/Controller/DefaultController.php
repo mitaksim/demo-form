@@ -10,7 +10,7 @@ class DefaultController extends AbstractController
     /**
      * Page d'accueil
      * 
-     * @Route("/", name="homepage")
+     * @Route("/", name="homepage"), methods={""GET"}
      */
     public function index()
     {
