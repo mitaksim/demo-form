@@ -49,4 +49,19 @@
         ```
         $request->query->get('task');
         ```
+    - On reteste, on récupéres bien le nom qu'on avait tapé dans l'input.
 
+7. Pour pouvoir ajouter vraiment une nouvelle tâche, on doit instancier la classe **TodoModel** qui contient la méthode **add()**.
+    ```
+    $task = new TodoModel();
+    $task->add($request->request->get('task'));
+    ```
+
+    On teste en tapant à nouveau une tâche, il y a une erreur, parce que le code est pas encore optimal. Mais quand on revient sur la page d'ajout et on actualise la page il y a bien la tâche qui s'est rajouté.
+
+8. On souhaite maintenant rediriger l'utilisateur vers la page où se trouvent toutes les tâches, pour ça on va utiliser la fonction **redirect()** de Symfony :
+    ```
+    return $this->redirectToRoute('todo_list');
+    ```
+
+    On teste et ça marche! 

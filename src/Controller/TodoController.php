@@ -56,6 +56,15 @@ class TodoController extends AbstractController
      */
     public function todoAdd(Request $request)
     {
-        dump($request->request->get('task'));exit;
+        // Teste l'ajout d'une nouvelle tâche
+        // dump($request->request->get('task'));exit;
+
+        //TodoModel::add($request->request->get('task')); 
+        $task = new TodoModel();
+        $task->add($request->request->get('task'));
+
+        // on redirige l'utilisateur vers la liste des tâches.
+        return $this->redirectToRoute('todo_list');
+
     }
 }
