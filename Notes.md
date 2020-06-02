@@ -132,4 +132,57 @@ Commentaire personnel : Finalement, la dernière fois j'ai pas eu le temps de fa
     ```
     Maintenant on aura plus à vérifier si la tâche est faite ou pas, avec l'annotation c'est Symfony que le fera pour nous.
 
+**Flash messages**
+
+**Doc :** https://symfony.com/doc/current/controller.html#flash-messages
+
+Dès qu'un utilisateur sera sur sa session, un message flash apparaîtrat dès qu'il ajoute/supprime une nouvelle tâche pour le prévenir qui la tâche a bien été ajouté/supprimé.
+
+**Note**: **app** c'est une variable toujours disponible dans Twig, elle nous donnera plusierus informations importantes sur notre application.
+
+1. On reste sur la méthode **todoSetStatus()**, où on va faire appel à la méthode **addFlash()** de Symfony.
+
+    Cette méthode attend deux paramètres, la première c'est le **type** de message que l'on souhaite envoyer : *notice*, *success*, *warning*...
+    Le deuxième paramètre : c'est le message que l'on soujaite envoyer.
+
+    ```
+    $this->addFlash('success', 'La tâche #' .$id. ' est bien marqué comme ' .$status);
+    ```
+2. Quand on coche et décoche les tâches il n'y a rien que se passe, on a pas de messages, parce qu'on a pas encore créer la vue pour les afficher.
+
+    Pour l'exemple, on va dans le template *index.html.twig* et on colle le dernier exemple qu'ils ont mis dans la doc pour l'affichage de la vue : 
+    ```
+    {% for label, messages in app.flashes %}
+    {% for message in messages %}
+        <div class="flash-{{ label }}">
+            {{ message }}
+        </div>
+	    {% endfor %}
+    {% endfor %}
+    ```
+3. Maintenant, on peut tester en allant à la page d'accueil il y aura bien tous les messages concernant les actions que l'ont a faites.
+    ```
+    La tâche #1 est bien marqué comme done
+    La tâche #2 est bien marqué comme done
+    La tâche #2 est bien marqué comme undone
+    ```
+4. En commentant le code ci-dessus :
+    ``` 
+    {{ dump(app) }}
+    ```
+
+    On accéde à toutes les propriétés de **app**. On va chercher **session**, jusqu'à ce qu'on tombe sur 
+    ```
+    "_symfony_flashes" => &3 []
+    ```
+    Là, on voit que notre tableau est vide, alors on fait quelques changements en cochant et en décochant les tâches et on actualise le dump. Là on voit que ça a changé et on retrouve bien dans le tableau toutes les tâches cochés/décochés.
+
+5. Toutes ces manips pour comprendre ce qu'on peut trouver quand on fait une boucle dans **app.flashes** :
+    
+    - *messages* : ça correspond à l'ensemble des messages que l'on peut trouver, soit: success, warning, etc...
+
+    - dans la deuxième boucle, on boucle la liste des messages par type. Dans notre cas, il n'y a qu'une : *success*.
+
+6. L'exemple c'était juste pour montrer qu'on peut les afficher n'importe où, maintenant on peut les effacer.
+
 

@@ -48,6 +48,9 @@ class TodoController extends AbstractController
         // Change le statut d'une tâche
         TodoModel::setStatus($id, $status);
 
+        // On ajoute un message flash, càd un message qu'on stocke dans la session et qui sera affiché juste quand on trouvera que ce sera le bon moment
+        $this->addFlash('success', 'La tâche #' .$id. ' est bien marqué comme ' .$status);
+
         // On redirige l'utilisateur vers la liste des tâches
         return $this->redirectToRoute('todo_list');
     }
