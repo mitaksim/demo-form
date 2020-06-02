@@ -185,4 +185,25 @@ Dès qu'un utilisateur sera sur sa session, un message flash apparaîtrat dès q
 
 6. L'exemple c'était juste pour montrer qu'on peut les afficher n'importe où, maintenant on peut les effacer.
 
+    Le plus intéressant c'est d'afficher ces messages quelque part dans la vue **list.html.twig**. Pour savoir l'endroit exacte, on vérifie les maquettes.
+
+7. Le message doit être ajouté juste avant la liste des tâches.
+    ```
+    {% for messageType in app.flashes %}
+    {% for message in messageType %}
+        {{ message }}
+    {% endfor %}
+    ```
+
+    Pour qu'au niveau du style ça ressemble à la maquette on va utiliser **Bootstrap 3.3.7**. Dans **Components** on va utiliser les **alertes**.
+
+    Le code pour les alertes success :
+    ```
+    <div class="alert alert-success"> role="alert">...</div>
+    ```
+
+    C'est à l'endroit où il y a les 3 poitns qu'on va mettre nos messages.
+
+8. On teste, en cochant et en décochant les cases et il y a bien les alertes messages qu'apparaîssent :grinning:
+
 
