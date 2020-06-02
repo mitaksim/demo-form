@@ -65,3 +65,71 @@
     ```
 
     On teste et ça marche! 
+
+**31/05/2020**
+
+1. On nous demande de définir la route en *annotation* pour la méthode **todoSetStatus**. 
+
+    **Commentaire personnel**: En suivant tous les pas du prof, j'arrive pas à trouver la même chose. D'abord j'avais une erreur concernant l'existance ou pas du fichier **annotations.yaml**, c'était pas les cas, alors je fais un : 
+    ```
+    composer require annotations
+    ```
+
+    Je sais pas si c'était vraiment utile, vu qu'avant les routes en annotation marchait bien. Mais j'ai plus le message d'erreur qu'apparaît.
+
+    **Erreur debug Symfony**
+
+    Je continue à avoir des erreurs, cette fois concernant le debug de Symfony qui a été déprecié entre temps, je fais une recherche Google et on nous dit de faire juste un composer de debug :
+    ```
+    composer require Symfony/debug
+    ```
+
+    **Erreur Doctrine**
+
+    *User Deprecated: Creating Doctrine\ORM\Mapping\UnderscoreNamingStrategy without making it number aware is deprecated and will be removed in Doctrine ORM 3.0.*
+
+    En faisant des recherches, je suis tombé sur cette solution : 
+
+    1. Dans le dossier **packages/doctrine.yaml** changer la première ligne par la deuxième en ajoutant *_number_aware*:
+        ```
+        naming_strategy: doctrine.orm.naming_strategy.underscore
+  
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+        ```
+
+**02/06/2020**
+
+Commentaire personnel : Finalement, la dernière fois j'ai pas eu le temps de faire grand chose à part corriger les erreurs. 
+
+1. Pour pouvoir définir le statut d'une tâche en *done* ou *undone* comme demandé dans l'énoncé en utilisant les **requirements** :
+
+    cf. **doc** : https://symfony.com/doc/current/routing.html#special-parameters
+
+    ```
+    /**
+     * Changement de statut
+     *
+     * @Route(
+     *  "/todo/{id}/{status}", name="todo_set_status", requirements={"id": "\d+", "status": "done|undone"}, methods={"GET"})
+     */
+     ```
+2. On teste en tapant la **route/todo/2/done**, on a une erreur mais il a trouvé quand même la route, le message suivant apparaît :
+
+    ```
+    No route found "GET/todo/2/done":Method Not Allowed (Allow: POST)
+    ```
+
+3. Comme on a mis une contrainte, la route accepte juste *done* ou *undone*, si on met une autre chose, Symfony va pas trouver la route et le message suivant apparaît:
+    ```
+    No route found for "GET /todo/2/nimportequoi
+    ```
+
+4. Comme vu dans le message d'erreur, la méthode HTTP à utiliser ce sera plutôt du **GET**, parce qu'il va nous falloir cocher la case quand la tâche serait *done*, alors on la change dans notre **annotation**
+
+5. Pour que ça marche vraiment, on doit instancier la classe **TodoModel** et appeler la méthode **setSatus** en passant en paramètre l'id de la tâche à changer le status et le status lui même.
+    ```
+    TodoModel::setStatus($id, $status);
+    ```
+    Maintenant on aura plus à vérifier si la tâche est faite ou pas, avec l'annotation c'est Symfony que le fera pour nous.
+
+
