@@ -206,4 +206,8 @@ Dès qu'un utilisateur sera sur sa session, un message flash apparaîtrat dès q
 
 8. On teste, en cochant et en décochant les cases et il y a bien les alertes messages qu'apparaîssent :grinning:
 
+9. On pourrait utiliser les boucles avec la méthode **clé valeur** aussi.
+
+    *cf. commit*
+
 

@@ -7,9 +7,14 @@
 <h2>Liste des tâches</h2>
 
 {# Messages flash #}
-{% for messageType in app.flashes %}
-    {% for message in messageType %}
-    <div class="alert alert-success">{{ message }}</div>
+{# 
+messageType est une clé et messageList sa valeur 
+messageType vaut ici "success" ou "danger", par exemple
+messageList est un tableau de message du type de messageType
+#}
+{% for messageType, messageList in app.flashes %}
+    {% for message in messageList %}
+    <div class="alert alert-{{ messageType }}">{{ message }}</div>
      {% endfor %}   
 {% endfor %}
 
