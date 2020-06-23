@@ -210,4 +210,147 @@ Dès qu'un utilisateur sera sur sa session, un message flash apparaîtrat dès q
 
     *cf. commit*
 
+10. Maintenant, on pourra faire la même chose pour les autres méthodes, ajouter le message quand une nouvelle tâche a été ajouté par exemple :
+
+    - On commence par créer une nouvelle variable **$tasks** où on va stocker la réponse de la requête get('task').
+    ```
+    $tasks = $request->request->get('task');
+    ```
+
+    - On change la demande de requête qu'avant était dans l'appel à la méthode **add()** :
+    ```
+    $task->add($tasks);
+    ```
+
+    - Et on ajoute le message avec **addFlash()** :
+    ```
+    $this->addFlash('success', 'La tâche "' .$tasks. '" a bien été ajoutée.');
+    ```
+
+**23/06/2020**
+
+1. On continue à coder la fonction **todoAdd**, en mettant ce qu'il faut faire si le champ de l'input est vide.
+
+    ```
+     $tasks = $request->request->get('task');
+
+        if (empty($tasks))  {
+            $this->addFlash('danger', 'La tâche ' .$tasks. 'est vide et n\'a pas été ajouté.');
+        } else {
+            $task = new TodoModel();
+            $task->add($tasks);
+            
+            $this->addFlash('success', 'La tâche "' .$tasks. '" a   bien été ajoutée.');
+        }
+        
+        return $this->redirectToRoute('todo_list');
+    }
+    ``` 
+
+2. On peut mettre un **trim()** aussi dans la requête qui va récupérer la tâche pour qu'il prenne pas en compte les espaces.
+
+    ``` 
+    $tasks = trim($request->request->get('task'));
+    ```
+3. On teste et ça marche bien! 
+
+4. On passe à la suppression d'une tâche.
+
+    On la fait avec la méthode POST, parce qu'on fait un changement dans la bdd. En méthode GET ça permettrait que quelqun passe d'autres informations dans URL, ce qui pourrait effacer plusieurs données de notre base. C'est une petite protection.
+
+5. On va vérifier notre template **list.html.twig** et on va changer le *action* de **fomr** qui n'a pas été renseigné.
+
+    ```
+    <form action="{{ path('todo_delete' }}" method="post">
+        <button class="btn btn-xs btn-link" type="submit"name="delete"><span class="glyphiconglyphicon-remove"></span></button>
+    </form>
+    ```
+
+    La route n'existe pas encore, on va la créer.
+
+6. Dans **TodoController** on vient créer cette route :
+
+    ```
+    public function todoDelete() {
+
+    }
+    ```
+
+7. On fait un C/C du **doc BLock** de l'ajout d'une tâche.
+
+8. Comme on veut récupérer les informations de notre requête, il nous faut un objet *Request*. Avec l'objet Request on va pouvoir trouver l'objet en question.
+
+    ```
+    public function todoDelete(Request $request) {
+        $id = $request->request->get('task_id);
+    }
+    ```
+
+    Il faut qu'on vérifie si **l'id** est bien fourni, si la tâche existe et si c'est bien un entier.
+
+9. Maintenant, dans le **form** de **list.html.twig** on va ajouter un **input** :
+
+    ```
+    <input type="hidden" name="task_id" value="{{ key }}">
+    ```
+
+10. On teste en inspectant les tâches et il y a bioen que la value qui change avec l'id de chaque tâche.
+
+11. On doit vérifier qu'on a bien reçu l'id, ça veut dire le GET ne renvoi pas **false**, si c'est bien un **entier** :
+
+    ```
+    if ($id != false && is_numeric($id)) 
+    ```
+
+    Et que la tâche existe :
+
+    ```
+    $task = TodoModel::find($id);
+
+    if ($id != false && is_numeric($id) && $task != false)
+    ```
+
+12. Si les conditions son bien respectées, on appelle la méthode **delete()** de **TodoModel** :
+
+    ``` 
+    TodoModel::delete($id);
+
+    $this->addFlash('success', 'La tâche a bien été supprimée);
+    ```
+
+13. Si les consitions sont pas respectées :
+
+    ```
+    } else {
+        $ths->addFlash('danger, 'Une erreur est survenu, la tâche n\'a pas été supprimée);
+    }
+    ```
+
+14. Après la suppression, on redirigera l'utilisateur vers la page des listes.
+
+    ```
+    return $this->redirectToRoute('todo_list);
+    ```
+
+15. On teste et on arrive bien à supprimer les tâches. La seule tâche qu'on arrive pas à supprimer c'est la première avec l'indice 0.
+
+    **Rappel** : 
+    
+    Equivalents de false : 
+
+        - 0
+        - Chaîne vide
+        - Tableau vide
+        - Objet vide
+
+    Si, dans notre condition on met **$id !== false** ça va marcher, parce que là on va vérifier si le type et la valeur sont différents.
+
+16. Maintenant ça marche. Mais, dès que tout est supprimée, les tâches de bases reviennent toutes seules. On verra ça après.
+
+
+
+
+
+
+
 

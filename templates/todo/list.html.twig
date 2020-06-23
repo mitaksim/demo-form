@@ -25,7 +25,8 @@ messageList est un tableau de message du type de messageType
     <li class="list-group-item">
 
         <!-- TODO: delete-->
-        <form action="" method="post">
+        <form action="{{ path('todo_delete') }}" method="post">
+        <input type="hidden" name="task_id" value="{{ key }}">
             <button class="btn btn-xs btn-link" type="submit" name="delete"><span class="glyphicon glyphicon-remove"></span></button>
         </form>
 

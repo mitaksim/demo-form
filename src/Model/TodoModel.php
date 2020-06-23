@@ -55,7 +55,7 @@ class TodoModel
         return self::$session->get('todos');
     }
 
-    public function find($id)
+    public static function find($id)
     {
         // On récupère les tâches
         $tasks = self::getTodos();
@@ -67,7 +67,7 @@ class TodoModel
         return false;
     }
 
-    public function setStatus($id, $status)
+    public static function setStatus($id, $status)
     {
         // On récupère les tâches
         $tasks = self::getTodos();
@@ -86,7 +86,7 @@ class TodoModel
     /**
      * Retourne true (si delete ok) ou false (si tâche non trouvée)
      */
-    public function delete($id)
+    public static function delete($id)
     {
         // On récupère les tâches
         $tasks = self::getTodos();

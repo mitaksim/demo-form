@@ -67,12 +67,50 @@ class TodoController extends AbstractController
         // Teste l'ajout d'une nouvelle tâche
         // dump($request->request->get('task'));exit;
 
-        //TodoModel::add($request->request->get('task')); 
-        $task = new TodoModel();
-        $task->add($request->request->get('task'));
+        // On récupère la tâche
+        $tasks = trim($request->request->get('task'));
+
+        // On vérifie si $tasks n'est pas un champ vide
+        if (empty($tasks))  {
+
+            // On ajoute un message pour dire que ça ne va pas fonctionner
+            $this->addFlash('danger', 'La tâche ' .$tasks. 'est vide et n\'a pas été ajouté.');
+        } else {
+
+            //TodoModel::add($request->request->get('task')); 
+            $task = new TodoModel();
+            $task->add($tasks);
+            
+            $this->addFlash('success', 'La tâche "' .$tasks. '" a bien été ajoutée.');
+        }
 
         // on redirige l'utilisateur vers la liste des tâches.
         return $this->redirectToRoute('todo_list');
+    }
 
+    /**
+     * Suppréssion d'une tâche
+     *
+     * @Route("/todo/delete", name="todo_delete", methods={"POST"})
+     *
+     */
+    public function todoDelete(Request $request) {
+        // On reçoit l'id depuis un formulaire
+        $id = $request->request->get('task_id');
+
+        // On instancie TodoModel pour récupérer l'id de la tâche
+        $task = TodoModel::find($id);
+
+        if ($id !== false && is_numeric($id) && $task != false) {
+            // on supprime notre tâche
+            TodoModel::delete($id);
+            // on prévient que la suppresiion est faite
+            $this->addFlash('success', 'La tâche a bien été supprimée');
+        } else {
+            $this->addFlash('danger', 'Une erreur est survenu, la tâche n\'a pas éte supprimée');
+        }
+
+        // La suppression est ok, on redirige l'utilisateur vers la page des tâches
+        return $this->redirectToRoute('todo_list');
     }
 }
