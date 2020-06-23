@@ -422,6 +422,35 @@ Dès qu'un utilisateur sera sur sa session, un message flash apparaîtrat dès q
 
     On passe la variable que l'on veut utiliser dans le template comme deuxième paramètre de la fonction.
 
+### Titre de page différent
+
+1. Dans notre **base.html.twig**, on a déjà le bloc :
+
+    ```
+    <title>{% block title %}{% endblock %}</title>
+    ```
+
+    Alors, il suffit de reprendre ce bloc dans chaque template où on veut changer de nom.
+
+2. On commence par **index.html.twig**, où on veut mettrre le nom de l'application:
+
+    ```
+    {% block title %}TodoApp{% endblock %}
+    ```
+
+3. Maintenant, on veut que dans la page *Détail de la tâche* **single.html.twig** l'intitulé de la tâche soit le titre de la page.
+
+    - On fait un C/C du bloc :
+
+    ```
+    {% block title %}TodoApp{% endblock %}
+    ```
+
+    - et on récupère l'intitulé de la tâche directement dans le code :
+
+    ```
+    {% block title %} {{todo.task }} {% endblock %}
+    ```
 
 
 
