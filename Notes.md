@@ -347,6 +347,38 @@ Dès qu'un utilisateur sera sur sa session, un message flash apparaîtrat dès q
 
 16. Maintenant ça marche. Mais, dès que tout est supprimée, les tâches de bases reviennent toutes seules. On verra ça après.
 
+## Templates
+
+1. Dans **list.html.twig** on va améliorer le bout de code qui concerne les tâches effectuées ou pas. Juste après le *form*.
+
+    On commence par copier la première partie : 
+
+    ``` 
+    <a href="{{ path('todo_set_status', { 'id' : key, 'status' : 'undone' } ) }}"><span class="glyphicon glyphicon-check"></span></a>
+    ```
+
+    On doit trouver une solution pour savoir si la tâche est **done** ou **undone** et l'écrire sur une seule ligne.
+
+    En regardant la *doc* de **Twig**, on voit qu'on a la possibilité d'écrire un ternaire directement dans le **html** comme on fait en PHP.
+
+    ```
+    <a href="{{ path('todo_set_status', { 'id' : key, 'status' : (todo.status == 'done' ? 'undone' : 'done') } ) }}"><spanclass="glyphicon glyphicon-check"></span></a>
+    ```
+
+2. On teste et ça marche. Il nous met bien deux checkboxs (comme on l'a recopié) et on reçoit le bon message si on coche ou pas la case.
+
+3. On pourrait faire la même chose pour la *classe* si **check** ou **unchecked** :
+
+    ```
+    <spanclass="glyphicon glyphicon-{{ (todo.status == 'done' ? 'check' : 'unchecked'}}"></span>
+    ```
+4. On teste et ça marche aussi!
+
+5. 
+
+
+
+
 
 
 

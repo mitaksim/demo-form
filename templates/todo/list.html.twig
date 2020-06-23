@@ -41,6 +41,12 @@ messageList est un tableau de message du type de messageType
                     class="glyphicon glyphicon-unchecked"></span></a>
             {% endif %}
 
+            {# Une autre façon de faire la consition sans répéter le code HTML, mais moins facile à lire :
+
+            <a href="{{ path('todo_set_status', { 'id' : key, 'status' : (todo.status == 'done' ? 'undone' : 'done') } ) }}"><span
+                    class="glyphicon glyphicon-{{ (todo.status == 'done' ? 'check' : 'unchecked') }}"></span></a>
+            #}
+         
             <!-- lien vers tâche -->
             <a href="{{ path('todo_show', { 'id' : key }) }}">
                 {% if todo.status == 'done' %}
