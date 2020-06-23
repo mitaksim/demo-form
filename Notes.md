@@ -374,8 +374,53 @@ Dès qu'un utilisateur sera sur sa session, un message flash apparaîtrat dès q
     ```
 4. On teste et ça marche aussi!
 
-5. 
+    **Rappel** : On peut appeller les *includes* de Twig **partials**.
 
+### Form
+
+1. Dans **todo**, on va créer le dossier **partials** avec un fichier **form_add** où on va mettre le formulaire qui contient toutes les informations pour l'ajout d'une tâche. Il se trouve dans le dossier **list.html.twig**.
+
+    **Rappel** : Dans Twig quand on utilise :
+        
+        - {% %} : utilisé plutôt pour la structure, pour faire des boucles, des **ifs*
+
+        - {{ }} : utilisé pour afficher une information 
+
+    Dans notre cas, on aura besoin d'aller chercher un autre bout de template, on va "informer" où il se trouve dans le code.
+
+    ``` 
+    {{ include('todo/partials/form_add.html.twig') }}
+    ```
+
+2. On teste, et on retrouve bien notre formulaire. 
+
+    Pour être sûre que le code a marché, on peut taper quelque chose dans le code du formluaire pour voir si ça s'affiche sur l'écran.
+
+3. Maintenant, on fait la même chose avec le *form* qui est dans le fichier **index.html.twig**.
+
+    L'avantage de factoriser ce formulaire comme d'habitude, c'est que si un jour on a besoin de changer quelque chose il suffira de changer dans un seul fuchier qui ça prendra en compte tous les fichiers où il y a un **include**.
+
+4. On pourra passer aussi, le nom du titre de façon dynamique.
+
+    ```
+    <h3>{{ form_add_title }}</h3>
+    ```
+
+    Cette variable n'existe pas encore, on va la créer.
+
+5. On va mettre ce code non pas directement dans notre fichier **form_add**, mais dans les fichiers **index.html.twig** et **list.html.twig**. Comme ça chacun pourra avoir un titre différent.
+
+     ```
+    {% set form_add_title = 'Vous pouvez ajouter une tâche ici' %}
+    ```
+
+6. Ca marche comme ça, mais c'est pas la bonne façon de faire, le mieux serait de faire comme ceci :
+
+    ```
+    {{ include'todo/partials/form_add.html.twig', {form_add_title: 'Ajout d\'une tâche' }) }}
+    ```
+
+    On passe la variable que l'on veut utiliser dans le template comme deuxième paramètre de la fonction.
 
 
 
