@@ -39,7 +39,7 @@ class TodoModel
         // Des données existent-elles
         if (self::$session->get('todos', false) == false) {
             // Si vide, on initialise
-            self::$session->set('todos', self::$initTodos);
+            self::reset();
         }
     }
 
@@ -127,5 +127,15 @@ class TodoModel
 
         // On écrase les todos
         self::setTodos($todos);
+    }
+
+    public static function reset() {
+
+        // La session est-elle créee au sein de ma classe ?
+        if (self::$session == null) {
+            self::$session = new Session();
+        }
+        
+        self::$session->set('todos', self::$initTodos);
     }
 }

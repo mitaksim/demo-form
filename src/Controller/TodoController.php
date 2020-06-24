@@ -113,4 +113,21 @@ class TodoController extends AbstractController
         // La suppression est ok, on redirige l'utilisateur vers la page des tâches
         return $this->redirectToRoute('todo_list');
     }
+
+    /**
+     * Liste des tâches
+     *
+     * @Route("/todos/reset", name="todos_reset", methods={"GET"})
+     */
+    public function resetMessage() 
+    {
+        // Appel à la méthode reset de TodoModel
+        TodoModel::reset();
+
+        // On ajoute un message flash qui sera affiché la prochaine fois qu'on voit la liste des tâches
+        $this->addFlash('success', 'Les tâches ont été réinitialisées');
+
+        // On redirige l'utilisateur sur la liste des tâches
+        return $this->redirectToRoute('todo_list');   
+    }
 }

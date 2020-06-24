@@ -452,6 +452,136 @@ Dès qu'un utilisateur sera sur sa session, un message flash apparaîtrat dès q
     {% block title %} {{todo.task }} {% endblock %}
     ```
 
+### Model
+
+1. L'énoncé nous demande de créer une méthode **reset()** qui va remettre la liste à ces données de base.
+
+**24/06/2020**
+
+Continuation du cours d'hier : **TodoList S01E05** 13h44h
+
+1. Dans **TodoModel**, on va créer une nouvelle fonction **reset()**. 
+
+    On a récupéré directement de la fonction **checkSession()**, la ligne qui reset la liste des tâches lorsque celle-ci est vide.
+
+    ``` 
+     public static function reset() {
+        self::$session->set('todos', self::$initTodos);
+    }
+    ```
+
+2. Comme cette fonction n'a qu'une seule ligne de code et on l'a récupéré d'une autre fonction. Ce qu'on pourrait faire, c'est effacer cette ligne du code "original" et faire juste appel à cette fonction dans celle-ci.
+
+    Dans **checkSession** alors :
+
+    Code après changement:
+
+    ```
+    self::reset();
+    ```
+
+    Le résultat est le même, mais on optimise la maintenance du code. Si un jour on voudra reset la liste d'une autre façon, on n'aura que la méthode reset() à modifier.
+
+3. Pour pouvoir utiliser cette ligne, il faut aussi C/C la condition pour vérifier si la session est déjà ouverte ou pas. Si c'est pas le cas il faudra l'instancier.
+
+    ```
+    public static function reset() {
+
+        // La session est-elle créee au sein de ma classe ?
+        if (self::$session == null) {
+            self::$session = new Session();
+        }
+        
+        self::$session->set('todos', self::$initTodos);
+    }
+    ```
+
+4. Il nous faut aussi un **lien** qui contiendra un message flash pour réinitialiser les tâches. 
+
+    On va le faire dans **TodoController** parce que c'est lui qui gère la gestion des tâches.
+
+    - Créer une nouvelle méthode, une nouvelle route qui va servir à reset la tâche
+
+    ```
+     /**
+     * Reset des tâches
+     *
+     * @ Route("/todos/reset", name="todos_reset", methods={"GET"})
+     */
+    public function resetMessage() 
+    {
+        TodoModel::reset();
+
+        return $this->redirectToRoute('todo_list');   
+    }
+    ```
+5. On teste, en mettant des nouvelles tâches et quand on va sur l'URL **/todos/reset**, il y a bien les tâches de base qui se réinitialisent.
+
+6. On nous demande aussi, de mettre un message flash dès que les tâches sont réinitialisées.
+
+    ```
+    $this-addFlash('success', 'Les tâches ont bien été réinitialisées');
+    ```
+7. POur le lien qui nous permettra de réinitialiser la liste :
+
+    ```
+    <a href = "{{ path('todos_reset')}}">Réinitialiser la liste des tâches (dev)</a>
+    ```
+8. Il faudra que la couleur de ce **lien** soit rouge et on va faire en sorte qu'on ne voit ce lien que quand on sera en **mode dev**.
+
+    Comme dans ce projet, on est en train d'utiliser **Bootstrap**, on va dans la doc regarder comment on peut faire pour changer la couleur d'un texte. En fait, il suffit de créer une classe comme suit :
+
+    ```
+    <a href = "{{ path('todos_reset')}}" class="text-danger">Réinitialiser la liste des tâches</a>
+    ```
+
+9. Pour que le lien n'apparaîsse qu'en mode dev, dans **list.html.twig** on va faire un **dump de *app* :
+
+    ```
+    {{ dump(app) }}
+    ```
+
+    La réponse que l'on reçoit :
+
+    ```
+    AppVariable^ {#273 ▼
+      -tokenStorage: TokenStorage^ {#41 ▶}
+      -requestStack: RequestStack^ {#130 ▶}
+      -environment: "dev"
+      -debug: true
+    }
+    ```
+
+    Ce qui nous intéresse c'est **environment** ou **debug**, on pourra utiliser n'importe lequel des deux. Si le **debug** est activé, on affiche le lien sinon non.
+
+    Apparement c'est pas très propre d'avoir des liens en mode dev, mais si c'est un gros projet ça peut nous être utlile d'en avoir dans nos vues.
+
+10. Une fois qu'on a vu ce qu'on peut récupérer : 
+    
+    ```
+    {% if app.debug %}
+     <a href = "{{ path('todos_reset')}}" class="text-danger">Réinitialiser la liste des tâches</a>
+    {% endif %}
+    ``` 
+11. Pour vérifier si ça a bien marché, on va dans le fichier **.env** et on rajoute l'information **APP_DEBUG=false**, on doit redémarrer le serveur pour que les modifications soient prises en compte.
+
+    ```
+    ###> symfony/framework-bundle ###
+    APP_ENV=dev
+    APP_DEBUG=false
+    ...
+    ```
+    Ce qui se passe c'est qui quand on est en mode dévéloppemnt (**APP_ENV=dev**) le **APP_DEBUG** est égale à true, il passera à false quand on sera en mode prod. Mais on a l'option d'ajouter une variable d'environnement et changer sa valeur manuellement.
+
+12. Comme c'était juste pour tester, on défait la manip et on revient à l'état où on était. Ne pas oublier de stopper le serveur et le relancer après la modif.
+
+## Bonus
+
+1. Rendre le menu dynamique selon la page où on est.
+
+
+
+
 
 
 
