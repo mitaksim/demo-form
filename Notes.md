@@ -577,7 +577,58 @@ Continuation du cours d'hier : **TodoList S01E05** 13h44h
 
 ## Bonus
 
-1. Rendre le menu dynamique selon la page où on est.
+1. Rendre le menu dynamique selon la page où on est. 
+
+    On recommence par revoir notre code **base.html.twig**. On voit que c'est la classe **active** qui nous dira si on est en tel ou tel page, alors c'est ici qu'il va falloir "jouer" pour faire ce qu'on veut.
+
+2. On commence par faire un **dump** de **app** encore une fois juste au dessus de la *nav*.
+
+    Cette fois, on va regarder du coté de **requestStack**, on voit qu'on reçoit bien notre route **todo_list** dans la propriété *parameters* de *attributes*. On va chercher dans la doc une façon plus simple d'accéder à cette information :
+
+    ```
+    {{ dump(app.request.attributes) }}
+    ```
+
+3. On arrive à aller jusqu'à **attributtes**, mais quand opn essaie de continuer en faisant **.parameters._route** pour accéder à) la route on y arrive pas.
+
+    Pour ça, il va falloir creuser encore dans la doc. 
+    
+    Ne pas oublier de vérifier si la version de Symfony correspond à celle du projet.
+
+4. Pour y accéder, finalement on pourra utiliser un *get* :
+
+    ```
+    {{ dump(app.request.attributes.get('_route'))}}
+    ```
+
+    Tout ça, ça nous permet d'avoir la route actuelle de la page.
+
+5. On teste et on reçoit bien la route **"todo_list"** quand on est sur la page *Todos* et **homepage** quand on est sur la page *A propos*.
+
+6. En fait on n'a pas besoin de mettre **attributes**, on pourra juste écrire le dump comme ceci :
+
+    ```
+    {{ dump(app.request.get('_route'))}}
+    ```
+7. Maintenant, qu'on a découvert comment récupérer la route de chaque page, il va falloir trouver l'endroit où l'utiliser dans le code.
+
+    On va faire une condition dans le *li* de **homepage**.
+
+    ```
+    <li {% if (app.request.get('_route') == 'homepage') %} class="active" {% endif %}>
+    ```
+
+8. On mettra la même condition dans le *li* de **todo_list**
+
+9. Quand on teste, on voit maintenant que chaque menu est activé quand on clique dessus. Sauf pour le détail de la page qui contient pas un menu spécifique.
+
+    On va régler ce soucis, juste en changeant un peu la condition du deuxième *if*. On va dire que si la route n'est pas la **homepage** il va mettre la classe **active** dans la route actuelle.
+
+    ``` 
+    <li {% if (app.request.get('_route') != 'homepage') %} class="active"{% endif %}>
+    ```
+
+10.
 
 
 
