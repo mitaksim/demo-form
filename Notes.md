@@ -28,7 +28,7 @@
         ```
         public function todoAdd(Request $request)
         ```
-        La variable $request est un objet de la classe Request.On   peu l'utiliser grâce au *use*.
+        La variable $request est un objet de la classe Request. On peu l'utiliser grâce au *use*.
 
         Si on veut récupérer des données en GET :
         ```
@@ -628,11 +628,9 @@ Continuation du cours d'hier : **TodoList S01E05** 13h44h
     <li {% if (app.request.get('_route') != 'homepage') %} class="active"{% endif %}>
     ```
 
-10.
+### Modifier le code actuel pour MAJ du statut/suppression d'une tâche avec AJAX
 
-
-
-
+1. Il nous faudra créer une nouvelle route. Ex : /api/delete et envoyer la réponse en JSON
 
 
 
